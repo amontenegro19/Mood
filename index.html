@@ -10,20 +10,88 @@
 <style>
 :root{--bg:#111;--paper:#f7f5f2;--muted:#aaa8a5;--mood:#8057c7;--line:#ffffff26}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--paper);font-family:Manrope,Arial,sans-serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}.mono{font-family:"DM Mono",monospace;text-transform:uppercase;letter-spacing:.13em;font-size:10px}.nav{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;border-bottom:1px solid var(--line);position:sticky;top:0;background:#111e;backdrop-filter:blur(16px);z-index:9}.logo{font-weight:800;font-size:23px;letter-spacing:.16em}.links{display:flex;gap:25px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#bbb}.pill{border:1px solid #777;border-radius:30px;padding:11px 15px;font-size:10px;letter-spacing:.1em;text-transform:uppercase}.hero{min-height:calc(100vh - 74px);display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:center;padding:6vh 8vw;overflow:hidden}.eyebrow{color:#aaa;display:flex;gap:10px;align-items:center}.dot{width:6px;height:6px;background:var(--mood);border-radius:50%;box-shadow:0 0 16px var(--mood)}h1{font-size:clamp(70px,10vw,145px);line-height:.8;letter-spacing:-.095em;margin:27px 0 0;font-weight:600}h1 .outline{display:block;color:transparent;-webkit-text-stroke:1px #f7f5f2;font-weight:300}h2{font-size:clamp(40px,6vw,75px);line-height:.95;letter-spacing:-.07em;font-weight:500;margin:14px 0 25px}.hero h3{font-size:clamp(32px,4.5vw,62px);letter-spacing:-.07em;margin:15px 0 0}.copy{font-size:14px;line-height:1.85;color:#b5b1ad;max-width:440px;margin:28px 0}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;padding:14px 19px;border-radius:30px;border:1px solid var(--paper);background:var(--paper);color:#111;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800}.btn.secondary{background:transparent;color:var(--paper);border-color:#555}.btn:hover{background:var(--mood);border-color:var(--mood);color:white}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:25px}.tab{background:transparent;border:1px solid #555;color:#ccc;padding:9px 12px;border-radius:24px;font-size:9px;letter-spacing:.1em;text-transform:uppercase}.tab[aria-pressed=true]{background:var(--mood);border-color:var(--mood);color:#fff}.meta{display:flex;gap:25px;color:#777;margin-top:40px}.art{min-height:530px;position:relative;display:flex;align-items:center;justify-content:center}.orbit{position:absolute;width:min(42vw,490px);aspect-ratio:1;border:1px solid #ffffff29;border-radius:50%;animation:spin 35s linear infinite}.orbit:before,.orbit:after{content:"";position:absolute;border:1px solid #ffffff1c;border-radius:50%;inset:13%}.orbit:after{inset:27%}.orbitpoint{position:absolute;left:20%;top:8%;width:10px;height:10px;border-radius:50%;background:var(--mood);box-shadow:0 0 20px var(--mood)}@keyframes spin{to{transform:rotate(360deg)}}.glow{position:absolute;width:300px;height:300px;border-radius:50%;background:var(--mood);filter:blur(90px);opacity:.3;transition:.4s}.bottle{position:relative;width:215px;height:355px;z-index:2;transform:rotate(-5deg);filter:drop-shadow(0 35px 35px #0008);transition:.3s}.bottle:hover{transform:rotate(0) translateY(-7px)}.cap{position:absolute;top:0;left:70px;width:76px;height:62px;border-radius:8px 8px 3px 3px;background:linear-gradient(90deg,#151515,#555,#111);border:1px solid #777}.neck{position:absolute;top:59px;left:82px;width:52px;height:23px;background:linear-gradient(90deg,#555,#ddd,#555)}.glass{position:absolute;top:78px;left:15px;width:185px;height:265px;border:1px solid #ffffffa8;border-radius:28px 28px 35px 35px;background:linear-gradient(110deg,#ffffff3b,#ffffff08 40%,#ffffff24 70%,#ffffff05);overflow:hidden}.glass:before{content:"";position:absolute;left:22px;top:0;width:13px;height:100%;background:#fff2;filter:blur(5px)}.liquid{position:absolute;bottom:0;left:0;right:0;height:57%;background:var(--mood);opacity:.8;transition:.4s}.label{position:absolute;z-index:2;top:100px;left:0;right:0;text-align:center}.label strong{font-size:21px;letter-spacing:.2em}.label small{display:block;font-size:8px;letter-spacing:.2em;margin-top:12px}.caption{position:absolute;right:0;bottom:10px;color:#777;text-align:right;line-height:1.8}.section{padding:100px 8vw;border-top:1px solid var(--line)}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:35px;margin-bottom:45px}.sectionhead p{max-width:350px;color:#aaa;font-size:13px;line-height:1.8}.sectionhead .mono{color:var(--mood)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{position:relative;min-height:260px;padding:22px;border:1px solid var(--line);overflow:hidden;cursor:pointer;transition:.25s}.card:hover{transform:translateY(-5px);border-color:var(--c)}.card:before{content:"";position:absolute;right:-45px;top:-50px;width:150px;height:150px;border-radius:50%;background:var(--c);filter:blur(55px);opacity:.25}.card .symbol{font-size:35px;color:var(--c);margin:24px 0}.card h3{font-size:23px;margin:0 0 8px;letter-spacing:.05em}.card p{font-size:12px;color:#aaa;line-height:1.7}.notes{position:absolute;bottom:18px;left:22px;color:#888;font-size:8px;letter-spacing:.08em;text-transform:uppercase}.split{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:center}.packvisual{height:480px;background:#e9e6e1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.pack{width:235px;height:360px;background:#f7f5f2;color:#111;box-shadow:22px 28px 40px #0004;text-align:center;padding:32px 22px;transform:rotate(4deg);z-index:1}.pack strong{font-size:26px;letter-spacing:.16em}.target{width:108px;height:108px;border:1px solid var(--mood);border-radius:50%;margin:36px auto 24px;display:grid;place-items:center;position:relative}.target:before,.target:after{content:"";position:absolute;border:1px solid var(--mood);border-radius:50%;inset:13px}.target:after{inset:29px;background:var(--mood);opacity:.8}.target span{z-index:2;color:white;font-size:8px;letter-spacing:.12em}.orb{position:absolute;right:-65px;bottom:-70px;width:260px;height:260px;border-radius:50%;background:var(--mood);opacity:.3}.text h3{font-size:36px;letter-spacing:-.06em;font-weight:500;margin:13px 0 18px}.text p{color:#aaa;font-size:13px;line-height:1.9}.list{padding:0;list-style:none;margin-top:25px}.list li{padding:14px 0;border-bottom:1px solid var(--line);font-size:12px;color:#ddd}.list b{font-family:"DM Mono";color:var(--mood);margin-right:14px;font-weight:400}.darksection{background:#171717}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.step{border-top:1px solid #666;padding:23px 15px;min-height:160px}.step .num{color:var(--mood);font-family:"DM Mono";font-size:11px}.step h3{font-size:18px;font-weight:500;margin:25px 0 10px}.step p{font-size:12px;line-height:1.7;color:#999}.filtergrid{display:grid;grid-template-columns:1fr 1fr;gap:7vw;align-items:center}.facearea{height:430px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid var(--line);background:radial-gradient(circle,var(--mood) 0%,#111 68%);background-blend-mode:soft-light}.face{width:185px;height:265px;background:linear-gradient(100deg,#d9b8a3,#986b59 65%,#d9b29c);border-radius:48% 48% 45% 45%;position:relative;box-shadow:inset -18px 0 30px #50352d55}.hair{position:absolute;top:-15px;left:-10px;right:-10px;height:110px;background:#251d1d;border-radius:50% 50% 25% 25%;z-index:2}.eye{position:absolute;top:112px;width:31px;height:12px;border-bottom:3px solid #2b2020;border-radius:50%;z-index:3}.eye.l{left:32px}.eye.r{right:32px}.nose{position:absolute;top:125px;left:88px;height:50px;width:14px;border-right:2px solid #875a4c}.mouth{position:absolute;top:195px;left:66px;width:52px;height:14px;border-bottom:3px solid #7c3e4c;border-radius:50%;z-index:3}.faceorbit{position:absolute;width:300px;height:300px;border:1px solid var(--mood);border-radius:50%;animation:spin 22s linear infinite}.faceorbit:before{content:"";position:absolute;inset:24px;border:1px solid var(--mood);border-radius:50%}.spark{position:absolute;color:var(--mood);font-size:25px}.s1{top:18%;left:20%}.s2{top:24%;right:20%}.s3{bottom:20%;left:24%}.s4{bottom:18%;right:22%}.uipanel{border:1px solid var(--line);padding:28px}.uipanel h3{font-size:32px;font-weight:500;margin:15px 0 8px}.uipanel p{font-size:12px;line-height:1.8;color:#aaa}.ui-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:20px}.ui-buttons button{padding:10px 12px;background:transparent;border:1px solid #555;color:#eee;text-transform:uppercase;font-size:9px;letter-spacing:.1em}.ui-buttons button:hover{background:var(--mood);border-color:var(--mood)}.foot{padding:45px 8vw;display:flex;justify-content:space-between;gap:20px;align-items:end;color:#888}.foot strong{font-size:23px;letter-spacing:.15em;color:white}.foot p{font-size:10px;line-height:1.8}.reveal{opacity:0;transform:translateY(18px);transition:.7s}.reveal.show{opacity:1;transform:none}
 @media(max-width:800px){.links{display:none}.hero{grid-template-columns:1fr;padding:60px 7vw}.art{min-height:420px}.orbit{width:80vw}.grid{grid-template-columns:repeat(2,1fr)}.sectionhead{display:block}.split,.filtergrid{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.hero{padding:50px 6vw}.art{min-height:360px}.bottle{transform:scale(.85)}.grid,.steps{grid-template-columns:1fr}.section{padding:75px 6vw}.packvisual{height:420px}.foot{display:block}}
+
+/* MOOD / real-time face filter studio */
+.studio{position:fixed;inset:0;z-index:1000;display:none;background:#080808;color:var(--paper);overflow:hidden}
+.studio.open{display:block}
+.studio-stage{position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,#342443 0%,#111 62%,#070707 100%)}
+#studioVideo,#studioCanvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+#studioVideo{opacity:.9;filter:brightness(.78) saturate(.86)}
+#studioCanvas{pointer-events:none}
+.studio-vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#050505a8 0%,transparent 24%,transparent 62%,#050505d9 100%)}
+.studio-top{position:absolute;z-index:3;top:0;left:0;right:0;padding:24px 5vw;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.studio-brand{font-weight:800;font-size:19px;letter-spacing:.18em}
+.studio-actions{display:flex;gap:8px;align-items:center}
+.studio-action{border:1px solid #ffffff75;background:#10101066;color:#fff;border-radius:30px;padding:11px 15px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(12px)}
+.studio-action:hover,.studio-action[aria-pressed=true]{background:var(--mood);border-color:var(--mood)}
+.studio-status{position:absolute;z-index:3;top:90px;left:50%;transform:translateX(-50%);max-width:90vw;text-align:center;padding:9px 14px;border:1px solid #ffffff35;border-radius:30px;background:#09090970;backdrop-filter:blur(12px);color:#eee;font-size:10px;letter-spacing:.08em}
+.studio-bottom{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:30px 5vw max(28px,env(safe-area-inset-bottom));background:linear-gradient(0deg,#080808ed,transparent);display:flex;flex-direction:column;align-items:center;gap:15px}
+.studio-current{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#ffffffa8}
+.studio-title{font-size:clamp(28px,5vw,48px);line-height:1;margin:0;letter-spacing:-.06em;font-weight:500}
+.studio-description{font-size:12px;color:#d0ccca;text-align:center;max-width:460px;line-height:1.6;margin:0}
+.studio-moods{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.studio-mood{min-width:92px;padding:12px 17px;border:1px solid #ffffff65;background:#1119;color:#fff;border-radius:30px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(14px)}
+.studio-mood[aria-pressed=true]{background:var(--mood);border-color:var(--mood);box-shadow:0 0 26px color-mix(in srgb,var(--mood),transparent 55%)}
+.studio-start{position:absolute;z-index:4;inset:0;display:flex;align-items:center;justify-content:center;padding:25px;background:#080808d9;text-align:center}
+.studio-start[hidden]{display:none}
+.studio-start-card{max-width:430px;padding:34px 28px;border:1px solid #ffffff30;background:#111e;backdrop-filter:blur(18px)}
+.studio-start-card .mono{color:var(--mood)}
+.studio-start-card h2{font-size:clamp(36px,7vw,58px);margin:18px 0 12px}
+.studio-start-card p{font-size:13px;line-height:1.8;color:#aaa;margin:0 0 22px}
+.studio-error{color:#ffb2a9!important}
+.pill{background:transparent;color:var(--paper)}
+@media(max-width:600px){.studio-top{padding:18px 5vw}.studio-brand{font-size:16px}.studio-action{padding:10px 12px;font-size:8px}.studio-status{top:76px;font-size:9px}.studio-bottom{padding-left:5vw;padding-right:5vw;padding-bottom:max(22px,env(safe-area-inset-bottom))}.studio-mood{min-width:calc(50% - 6px);padding:12px 10px}.studio-description{font-size:11px}}
+
 </style>
 </head>
 <body>
-<nav class="nav"><a class="logo" href="#inicio">MOOD<span style="color:var(--mood)">®</span></a><div class="links"><a href="#concepto">Concepto</a><a href="#fragancias">Fragancias</a><a href="#empaque">Empaque + AR</a><a href="#filtro">Filtro</a></div><a class="pill" href="#experiencia">Explorar ↗</a></nav>
+<nav class="nav"><a class="logo" href="#inicio">MOOD<span style="color:var(--mood)">®</span></a><div class="links"><a href="#concepto">Concepto</a><a href="#fragancias">Fragancias</a><a href="#empaque">Universo MOOD</a><a href="#filtro">Filtro</a></div><button class="pill" type="button" data-open-filter>EXPERIENCE MOOD ↗</button></nav>
 <main id="inicio">
-<header class="hero"><div><div class="eyebrow mono"><span class="dot"></span> Fragrance meets emotion / 001</div><h1>YOUR<br><span class="outline">MOOD.</span></h1><h3>YOUR SCENT.</h3><p class="copy">Una fragancia para cada versión de ti. Explora un universo donde el aroma se encuentra con el color, la emoción y la realidad aumentada.</p><div class="actions"><a class="btn" href="#fragancias">Descubre tu mood ↗</a><a class="btn secondary" href="#concepto">Conoce el concepto</a></div><div class="tabs"><button class="tab" data-mood="love" aria-pressed="false">01 Love</button><button class="tab" data-mood="calm" aria-pressed="false">02 Calm</button><button class="tab" data-mood="energy" aria-pressed="false">03 Energy</button><button class="tab" data-mood="mystic" aria-pressed="true">04 Mystic</button></div><div class="meta mono"><span>50 ml / Eau de parfum</span><span>Digital fragrance experience</span></div></div>
+<header class="hero"><div><div class="eyebrow mono"><span class="dot"></span> Fragrance meets emotion / 001</div><h1>YOUR<br><span class="outline">MOOD.</span></h1><h3>YOUR SCENT.</h3><p class="copy">Una fragancia para cada versión de ti. Explora un universo donde el aroma se encuentra con el color, la emoción y la realidad aumentada.</p><div class="actions"><button class="btn" type="button" data-open-filter>EXPERIENCE MOOD ↗</button><a class="btn secondary" href="#fragancias">Descubre las fragancias</a></div><div class="tabs"><button class="tab" data-mood="love" aria-pressed="false">01 Love</button><button class="tab" data-mood="calm" aria-pressed="false">02 Calm</button><button class="tab" data-mood="energy" aria-pressed="false">03 Energy</button><button class="tab" data-mood="mystic" aria-pressed="true">04 Mystic</button></div><div class="meta mono"><span>50 ml / Eau de parfum</span><span>Digital fragrance experience</span></div></div>
 <div class="art"><div class="orbit"><span class="orbitpoint"></span></div><div class="glow"></div><div class="bottle"><div class="cap"></div><div class="neck"></div><div class="glass"><div class="liquid"></div><div class="label"><strong>MOOD</strong><small id="bottleMood">MYSTIC</small><small>EAU DE PARFUM · 50 ML</small></div></div></div><div class="caption mono" id="caption">MYSTIC / 04<br>Explore within.</div></div></header>
 <section class="section reveal" id="concepto"><div class="sectionhead"><div><div class="mono">01 — El concepto</div><h2>Wear how<br>you feel.</h2></div><p>MOOD nace de una pregunta: ¿y si tu perfume pudiera reflejar cómo te sientes, en lugar de decirte cómo deberías sentirte?</p></div><div class="split"><div class="text"><div class="mono">The idea</div><h3>La emoción se convierte en identidad.</h3><p>MOOD es una marca conceptual de perfumería interactiva. Cada fragancia representa una atmósfera emocional y activa una experiencia visual propia. El aroma es físico; la experiencia digital convierte el estado de ánimo en color, movimiento y expresión.</p><p>La persona elige su mood. No es un diagnóstico psicológico ni pretende detectar emociones automáticamente.</p></div><div style="border:1px solid var(--line);padding:35px;min-height:270px;display:flex;flex-direction:column;justify-content:space-between;background:radial-gradient(circle at 75% 30%,#8057c744,transparent 48%)"><div class="mono">Brand belief / 001</div><div style="font-size:clamp(27px,4vw,47px);line-height:1.15;letter-spacing:-.06em">“No te dice cómo sentirte.<br><span style="color:var(--mood)">Te deja expresarlo.</span>”</div><div class="mono" style="color:#777">Mood is personal. Mood is fluid.</div></div></div></section>
 <section class="section reveal" id="fragancias"><div class="sectionhead"><div><div class="mono">02 — Fragrance collection</div><h2>Four moods.<br>One you.</h2></div><p>Cuatro universos sensoriales unidos por una identidad minimalista, sofisticada y futurista.</p></div><div class="grid"><article class="card" data-card="love" style="--c:#e94f87"><div class="mono">01 / Connection</div><div class="symbol">◉</div><h3>LOVE</h3><p>Una atmósfera cálida, íntima y envolvente.</p><div class="notes">Rose · Red berries · Vanilla</div></article><article class="card" data-card="calm" style="--c:#829be8"><div class="mono">02 / Balance</div><div class="symbol">≋</div><h3>CALM</h3><p>Una pausa suave para volver al centro.</p><div class="notes">White tea · Lavender · Sandalwood</div></article><article class="card" data-card="energy" style="--c:#ff7048"><div class="mono">03 / Motion</div><div class="symbol">✳</div><h3>ENERGY</h3><p>Una salida luminosa, vibrante y dinámica.</p><div class="notes">Mandarin · Ginger · Citrus</div></article><article class="card" data-card="mystic" style="--c:#8057c7"><div class="mono">04 / Imagination</div><div class="symbol">◌</div><h3>MYSTIC</h3><p>Un universo profundo para explorar hacia dentro.</p><div class="notes">Amber · Jasmine · Dark vanilla</div></article></div></section>
-<section class="section reveal" id="empaque"><div class="sectionhead"><div><div class="mono">03 — Packaging + image target</div><h2>The box is<br>the portal.</h2></div><p>Un empaque premium y una imagen de seguimiento que abre la puerta al universo digital de la fragancia.</p></div><div class="split"><div class="packvisual"><div class="pack"><strong>MOOD</strong><div class="target"><span>SCAN</span></div><h3 id="packMood" style="font-size:15px;letter-spacing:.2em">MYSTIC</h3><small id="packTag" class="mono">EXPLORE WITHIN.</small><div style="margin-top:32px;font-size:8px;letter-spacing:.16em">EAU DE PARFUM · 50 ML</div></div><div class="orb"></div></div><div class="text"><div class="mono">Packaging concept</div><h3>Diseñado para sentirse. Creado para explorarse.</h3><p>La caja usa espacio negativo, tipografía limpia y un símbolo circular propio de cada fragancia. La ilustración circular representa el Image Target: en una implementación real, una cámara compatible reconocería esta gráfica para activar contenido de realidad aumentada.</p><ul class="list"><li><b>01</b> Frasco de vidrio transparente y tapa negra mate.</li><li><b>02</b> Etiqueta minimalista con nombre y notas aromáticas.</li><li><b>03</b> Imagen de seguimiento integrada en la caja.</li><li><b>04</b> Instrucción de acceso: “SCAN YOUR MOOD”.</li></ul></div></div></section>
-<section class="section darksection reveal" id="experiencia"><div class="sectionhead"><div><div class="mono">04 — Augmented reality</div><h2>Scan.<br>Activate.<br>Experience.</h2></div><p>La realidad aumentada convierte el empaque en una experiencia narrativa: el perfume se rodea de partículas, halos y movimiento según el mood seleccionado.</p></div><div class="steps"><div class="step"><div class="num">01 / SCAN</div><h3>Reconoce</h3><p>La cámara encuadra la imagen de seguimiento impresa en la caja.</p></div><div class="step"><div class="num">02 / ACTIVATE</div><h3>Desbloquea</h3><p>La identidad visual se anima y aparece el universo de la fragancia.</p></div><div class="step"><div class="num">03 / CHOOSE</div><h3>Selecciona</h3><p>La persona elige cómo expresarse: LOVE, CALM, ENERGY o MYSTIC.</p></div><div class="step"><div class="num">04 / EXPERIENCE</div><h3>Explora</h3><p>Color, partículas y animaciones construyen una experiencia personalizada.</p></div></div></section>
-<section class="section reveal" id="filtro"><div class="sectionhead"><div><div class="mono">05 — Face filter / UI</div><h2>Wear your<br>mood.</h2></div><p>Un filtro facial editorial traduce cada mood a un lenguaje gráfico: halos, ondas, destellos y órbitas.</p></div><div class="filtergrid"><div class="facearea"><div class="faceorbit"></div><div class="face"><div class="hair"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="mouth"></div></div><span class="spark s1">✦</span><span class="spark s2">·</span><span class="spark s3">✧</span><span class="spark s4">✦</span></div><div class="uipanel"><div class="mono" style="color:#888">MOOD® / FILTER STUDIO</div><div class="mono" style="margin-top:35px">Your selected mood</div><h3 id="uiMood">MYSTIC</h3><p id="uiDesc">Explora tu lado introspectivo. Una órbita violeta y pequeñas constelaciones enmarcan el rostro.</p><div style="height:2px;background:#444;margin:24px 0"><div style="width:72%;height:2px;background:var(--mood)"></div></div><div class="mono" style="color:#777">Visual intensity / 72%</div><div class="ui-buttons"><button data-mood="love">Love</button><button data-mood="calm">Calm</button><button data-mood="energy">Energy</button><button data-mood="mystic">Mystic</button></div><p style="font-size:10px">Prototipo visual de interfaz. El tracking AR y el filtro facial real requieren integración con una plataforma compatible.</p></div></div></section>
-<section class="section reveal" id="producto"><div class="sectionhead"><div><div class="mono">06 — Product information</div><h2>A scent with<br>a point of view.</h2></div><p>Ficha de producto para la caja, el catálogo y la interfaz digital.</p></div><div class="split"><div class="text"><div class="mono">Selected fragrance / 04</div><h3 id="productName">MYSTIC — Eau de Parfum</h3><p id="productDesc">Una fragancia conceptual para momentos de introspección, imaginación y curiosidad.</p><ul class="list"><li><b>FORMATO</b> 50 ml / 1.69 fl. oz.</li><li><b>NOTAS</b> <span id="productNotes">Ámbar · Jazmín · Vainilla oscura</span></li><li><b>CARÁCTER</b> <span id="productChar">Profundo · envolvente · misterioso</span></li><li><b>EXPERIENCIA</b> Empaque con Image Target + filtro conceptual</li></ul></div><div style="padding:35px;border:1px solid var(--line);min-height:300px;display:flex;flex-direction:column;justify-content:space-between"><div class="mono">How to use</div><div style="font-size:clamp(27px,4vw,43px);line-height:1.25;letter-spacing:-.06em">Spray it.<br>Feel it.<br><span style="color:var(--mood)">Explore it.</span></div><p class="copy" style="margin:15px 0 0">Rocía sobre los puntos de pulso. Después, escanea la gráfica del empaque para descubrir la experiencia visual y selecciona el mood que quieras llevar contigo.</p></div></div></section>
+<section class="section reveal" id="empaque"><div class="sectionhead"><div><div class="mono">03 — Packaging concept</div><h2>The box is<br>the portal.</h2></div><p>Un empaque premium que traduce la identidad de cada fragancia a un objeto físico.</p></div><div class="split"><div class="packvisual"><div class="pack"><strong>MOOD</strong><div class="target"><span>MOOD</span></div><h3 id="packMood" style="font-size:15px;letter-spacing:.2em">MYSTIC</h3><small id="packTag" class="mono">EXPLORE WITHIN.</small><div style="margin-top:32px;font-size:8px;letter-spacing:.16em">EAU DE PARFUM · 50 ML</div></div><div class="orb"></div></div><div class="text"><div class="mono">Packaging concept</div><h3>Diseñado para sentirse. Creado para explorarse.</h3><p>La caja usa espacio negativo, tipografía limpia y un símbolo circular propio de cada fragancia. Su identidad visual conecta el objeto físico con el universo digital de MOOD.</p><ul class="list"><li><b>01</b> Frasco de vidrio transparente y tapa negra mate.</li><li><b>02</b> Etiqueta minimalista con nombre y notas aromáticas.</li><li><b>03</b> Símbolo gráfico propio para cada fragancia.</li><li><b>04</b> Acceso a la experiencia digital: “EXPERIENCE MOOD”.</li></ul></div></div></section>
+<section class="section darksection reveal" id="experiencia"><div class="sectionhead"><div><div class="mono">04 — Face filter experience</div><h2>Express.<br>Explore.<br>Experience.</h2></div><p>La cámara frontal reconoce el rostro en tiempo real y lo acompaña con halos, órbitas y partículas. Tú eliges el mood que quieres expresar.</p></div><div class="steps"><div class="step"><div class="num">01 / OPEN</div><h3>Activa</h3><p>Abre EXPERIENCE MOOD y permite el acceso a la cámara frontal.</p></div><div class="step"><div class="num">02 / TRACK</div><h3>Reconoce</h3><p>El filtro sigue los puntos del rostro en tiempo real.</p></div><div class="step"><div class="num">03 / CHOOSE</div><h3>Selecciona</h3><p>Elige entre LOVE, CALM, ENERGY o MYSTIC.</p></div><div class="step"><div class="num">04 / EXPRESS</div><h3>Explora</h3><p>Halos, ondas, destellos y partículas acompañan tu expresión.</p></div></div></section>
+<section class="section reveal" id="filtro"><div class="sectionhead"><div><div class="mono">05 — Face filter / UI</div><h2>Wear your<br>mood.</h2></div><p>Un filtro facial en tiempo real traduce cada mood a un lenguaje gráfico: halos, ondas, destellos y órbitas que siguen tu rostro.</p></div><div class="filtergrid"><div class="facearea"><div class="faceorbit"></div><div class="face"><div class="hair"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="mouth"></div></div><span class="spark s1">✦</span><span class="spark s2">·</span><span class="spark s3">✧</span><span class="spark s4">✦</span></div><div class="uipanel"><div class="mono" style="color:#888">MOOD® / FILTER STUDIO</div><div class="mono" style="margin-top:35px">Your selected mood</div><h3 id="uiMood">MYSTIC</h3><p id="uiDesc">Explora tu lado introspectivo. Una órbita violeta y pequeñas constelaciones enmarcan el rostro.</p><div style="height:2px;background:#444;margin:24px 0"><div style="width:72%;height:2px;background:var(--mood)"></div></div><div class="mono" style="color:#777">Visual intensity / 72%</div><div class="ui-buttons"><button data-mood="love">Love</button><button data-mood="calm">Calm</button><button data-mood="energy">Energy</button><button data-mood="mystic">Mystic</button></div><button class="btn" type="button" data-open-filter style="margin-top:22px">EXPERIENCE MOOD ↗</button><p style="font-size:10px;margin-top:16px">La cámara se activa cuando abres la experiencia. Elige tu mood y cambia de filtro cuando quieras.</p></div></div></section>
+<section class="section reveal" id="producto"><div class="sectionhead"><div><div class="mono">06 — Product information</div><h2>A scent with<br>a point of view.</h2></div><p>Ficha de producto para la caja, el catálogo y la interfaz digital.</p></div><div class="split"><div class="text"><div class="mono">Selected fragrance / 04</div><h3 id="productName">MYSTIC — Eau de Parfum</h3><p id="productDesc">Una fragancia conceptual para momentos de introspección, imaginación y curiosidad.</p><ul class="list"><li><b>FORMATO</b> 50 ml / 1.69 fl. oz.</li><li><b>NOTAS</b> <span id="productNotes">Ámbar · Jazmín · Vainilla oscura</span></li><li><b>CARÁCTER</b> <span id="productChar">Profundo · envolvente · misterioso</span></li><li><b>EXPERIENCIA</b> Filtro facial interactivo en tiempo real</li></ul></div><div style="padding:35px;border:1px solid var(--line);min-height:300px;display:flex;flex-direction:column;justify-content:space-between"><div class="mono">How to use</div><div style="font-size:clamp(27px,4vw,43px);line-height:1.25;letter-spacing:-.06em">Spray it.<br>Feel it.<br><span style="color:var(--mood)">Explore it.</span></div><p class="copy" style="margin:15px 0 0">Rocía sobre los puntos de pulso. Después, abre EXPERIENCE MOOD, activa la cámara y selecciona el mood que quieras llevar contigo.</p></div></div></section>
 </main><footer class="foot"><div><strong>MOOD®</strong><p>YOUR MOOD. YOUR SCENT.<br>Concepto académico ficticio de perfumería interactiva.</p></div><div class="mono">There is no single version of you. <span style="color:var(--mood)">✦</span></div></footer>
+
+<div class="studio" id="moodStudio" aria-hidden="true" role="dialog" aria-modal="true" aria-label="MOOD Face Filter Studio">
+  <div class="studio-stage">
+    <video id="studioVideo" autoplay muted playsinline></video>
+    <canvas id="studioCanvas"></canvas>
+    <div class="studio-vignette"></div>
+  </div>
+  <div class="studio-top">
+    <div class="studio-brand">MOOD<span style="color:var(--mood)">®</span></div>
+    <div class="studio-actions">
+      <button class="studio-action" id="studioSound" type="button" aria-pressed="true">SOUND ON</button>
+      <button class="studio-action" id="studioClose" type="button">CLOSE ✕</button>
+    </div>
+  </div>
+  <div class="studio-status" id="studioStatus" role="status" aria-live="polite">Preparando la experiencia…</div>
+  <div class="studio-start" id="studioStart">
+    <div class="studio-start-card">
+      <div class="mono">MOOD® / FACE FILTER STUDIO</div>
+      <h2>Wear your<br><span style="color:var(--mood)">mood.</span></h2>
+      <p id="studioStartMessage">Activa tu cámara frontal para probar los cuatro universos MOOD. El seguimiento facial ocurre en tiempo real desde tu navegador.</p>
+      <button class="btn" id="studioEnable" type="button">ACTIVATE CAMERA ↗</button>
+    </div>
+  </div>
+  <div class="studio-bottom">
+    <div class="studio-current">YOUR SELECTED MOOD</div>
+    <h2 class="studio-title" id="studioMoodName">MYSTIC</h2>
+    <p class="studio-description" id="studioMoodDescription">Explora tu lado introspectivo.</p>
+    <div class="studio-moods" role="group" aria-label="Seleccionar un mood">
+      <button class="studio-mood" data-filter-mood="love" type="button" aria-pressed="false">LOVE</button>
+      <button class="studio-mood" data-filter-mood="calm" type="button" aria-pressed="false">CALM</button>
+      <button class="studio-mood" data-filter-mood="energy" type="button" aria-pressed="false">ENERGY</button>
+      <button class="studio-mood" data-filter-mood="mystic" type="button" aria-pressed="true">MYSTIC</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const data={
 love:{color:'#e94f87',name:'LOVE',tag:'FEEL IT CLOSER.',notes:'Rosa · Frutos rojos · Vainilla',char:'Cálido · íntimo · envolvente',desc:'Conexión, sensualidad y afecto. Un halo rosado y partículas suaves enmarcan el rostro.',caption:'LOVE / 01 — Feel it closer.'},
@@ -33,4 +101,125 @@ mystic:{color:'#8057c7',name:'MYSTIC',tag:'EXPLORE WITHIN.',notes:'Ámbar · Jaz
 function setMood(k){let m=data[k]||data.mystic;document.documentElement.style.setProperty('--mood',m.color);document.querySelectorAll('[data-mood]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mood===k?'true':'false'));document.getElementById('bottleMood').textContent=m.name;document.getElementById('caption').textContent=m.caption;document.getElementById('packMood').textContent=m.name;document.getElementById('packTag').textContent=m.tag;document.getElementById('uiMood').textContent=m.name;document.getElementById('uiDesc').textContent=m.desc;document.getElementById('productName').textContent=m.name+' — Eau de Parfum';document.getElementById('productNotes').textContent=m.notes;document.getElementById('productChar').textContent=m.char;document.getElementById('productDesc').textContent='Una fragancia conceptual para expresar '+m.name.toLowerCase()+': '+m.char.toLowerCase()+'.';document.querySelectorAll('.card').forEach(c=>c.style.outline=c.dataset.card===k?'1px solid '+m.color:'none')}
 document.querySelectorAll('[data-mood]').forEach(b=>b.addEventListener('click',()=>setMood(b.dataset.mood)));document.querySelectorAll('[data-card]').forEach(c=>c.addEventListener('click',()=>setMood(c.dataset.card)));const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');obs.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));setMood('mystic');
 </script>
+
+<script type="module">
+const studio=document.getElementById('moodStudio');
+const video=document.getElementById('studioVideo');
+const canvas=document.getElementById('studioCanvas');
+const ctx=canvas.getContext('2d');
+const statusEl=document.getElementById('studioStatus');
+const startLayer=document.getElementById('studioStart');
+const startMessage=document.getElementById('studioStartMessage');
+const enableButton=document.getElementById('studioEnable');
+const soundButton=document.getElementById('studioSound');
+const moodName=document.getElementById('studioMoodName');
+const moodDescription=document.getElementById('studioMoodDescription');
+const filterButtons=[...document.querySelectorAll('[data-filter-mood]')];
+const filterData={
+ love:{name:'LOVE',color:'#e94f87',description:'Conexión, sensualidad y afecto. Un halo rosado y destellos suaves enmarcan tu rostro.'},
+ calm:{name:'CALM',color:'#829be8',description:'Pausa, equilibrio y tranquilidad. Ondas azules fluyen alrededor de tu rostro.'},
+ energy:{name:'ENERGY',color:'#ff7048',description:'Movimiento, confianza y vitalidad. Rayos coral acompañan cada gesto.'},
+ mystic:{name:'MYSTIC',color:'#8057c7',description:'Introspección e imaginación. Órbitas violetas y pequeñas constelaciones te envuelven.'}
+};
+let selectedMood='mystic',faceLandmarker=null,stream=null,animationFrame=0,running=false,lastVideoTime=-1,soundOn=true,audioContext=null,mpModule=null;
+function setStatus(message){if(statusEl.textContent!==message)statusEl.textContent=message;}
+function setFilterMood(key,playSound=true){
+ selectedMood=filterData[key]?key:'mystic';
+ const mood=filterData[selectedMood];
+ document.documentElement.style.setProperty('--mood',mood.color);
+ moodName.textContent=mood.name;
+ moodDescription.textContent=mood.description;
+ filterButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filterMood===selectedMood)));
+ if(playSound&&soundOn)playMoodTone(selectedMood);
+}
+function playMoodTone(key){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
+  audioContext ||= new AudioCtx();if(audioContext.state==='suspended')audioContext.resume();
+  const now=audioContext.currentTime,notes={love:[523.25,659.25],calm:[392,493.88],energy:[659.25,783.99],mystic:[440,554.37]};
+  (notes[key]||notes.mystic).forEach((frequency,i)=>{
+   const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
+   oscillator.type='sine';oscillator.frequency.value=frequency;
+   gain.gain.setValueAtTime(.0001,now+i*.075);gain.gain.exponentialRampToValueAtTime(.055,now+i*.075+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.24);
+   oscillator.connect(gain).connect(audioContext.destination);oscillator.start(now+i*.075);oscillator.stop(now+i*.075+.26);
+  });
+ }catch(error){}
+}
+function resizeCanvas(){if(!video.videoWidth||!video.videoHeight)return;if(canvas.width!==video.videoWidth||canvas.height!==video.videoHeight){canvas.width=video.videoWidth;canvas.height=video.videoHeight;}}
+async function loadFaceLandmarker(){
+ if(!mpModule)mpModule=await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm');
+ const {FaceLandmarker,FilesetResolver}=mpModule;
+ const vision=await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+ const options={baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',delegate:'GPU'},runningMode:'VIDEO',numFaces:1,minFaceDetectionConfidence:.5,minFacePresenceConfidence:.5,minTrackingConfidence:.5};
+ try{return await FaceLandmarker.createFromOptions(vision,options);}catch(error){options.baseOptions.delegate='CPU';return await FaceLandmarker.createFromOptions(vision,options);}
+}
+async function startCamera(){
+ enableButton.disabled=true;enableButton.textContent='LOADING…';startMessage.classList.remove('studio-error');
+ startMessage.textContent='Solicitando acceso a la cámara y preparando el seguimiento facial…';setStatus('Conectando la cámara frontal…');
+ try{
+  if(!navigator.mediaDevices?.getUserMedia)throw new Error('Tu navegador no permite acceder a la cámara. Abre esta página mediante HTTPS y prueba con un navegador actualizado.');
+  stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'user'},width:{ideal:1280},height:{ideal:720}}});
+  video.srcObject=stream;await video.play();setStatus('Preparando el filtro facial…');
+  faceLandmarker=await loadFaceLandmarker();resizeCanvas();startLayer.hidden=true;running=true;lastVideoTime=-1;
+  setStatus('Busca tu rostro frente a la cámara');renderFrame();
+ }catch(error){
+  stopCamera(true);
+  const message=error?.name==='NotAllowedError'||error?.name==='PermissionDeniedError'?'No se concedió permiso para usar la cámara. Permite el acceso desde el navegador y vuelve a intentarlo.':error?.name==='NotFoundError'?'No encontramos una cámara disponible en este dispositivo.':(error?.message||'No fue posible iniciar el filtro. Comprueba tu conexión y vuelve a intentarlo.');
+  startMessage.textContent=message;startMessage.classList.add('studio-error');startLayer.hidden=false;setStatus('No se pudo activar la cámara');
+ }finally{enableButton.disabled=false;enableButton.textContent='TRY AGAIN ↗';}
+}
+const faceOval=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+function point(landmarks,index){return{x:landmarks[index].x*canvas.width,y:landmarks[index].y*canvas.height};}
+function drawFaceEffect(landmarks,timestamp){
+ const w=canvas.width,mood=filterData[selectedMood],color=mood.color;
+ const top=point(landmarks,10),chin=point(landmarks,152),left=point(landmarks,234),right=point(landmarks,454);
+ const center={x:(left.x+right.x)/2,y:(top.y+chin.y)/2},rx=Math.max(45,Math.abs(right.x-left.x)*.72),ry=Math.max(65,Math.abs(chin.y-top.y)*.66),time=timestamp/1000;
+ const aura=ctx.createRadialGradient(center.x,center.y,ry*.1,center.x,center.y,Math.max(rx,ry)*1.55);
+ aura.addColorStop(0,color+'30');aura.addColorStop(.58,color+'1d');aura.addColorStop(1,color+'00');
+ ctx.fillStyle=aura;ctx.beginPath();ctx.ellipse(center.x,center.y,rx*1.55,ry*1.48,0,0,Math.PI*2);ctx.fill();
+ ctx.save();ctx.beginPath();faceOval.forEach((index,i)=>{const p=point(landmarks,index);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);});ctx.closePath();
+ ctx.lineWidth=Math.max(2,w*.0022);ctx.strokeStyle=color;ctx.shadowColor=color;ctx.shadowBlur=18;ctx.globalAlpha=.82+Math.sin(time*2.2)*.12;ctx.stroke();ctx.restore();
+ ctx.save();ctx.translate(center.x,center.y);ctx.lineWidth=Math.max(1.2,w*.0015);ctx.strokeStyle=color;ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=13;
+ if(selectedMood==='love'){for(let i=0;i<3;i++){ctx.globalAlpha=.48-i*.1;ctx.beginPath();ctx.ellipse(0,0,rx*(1.12+i*.13),ry*(1.08+i*.12),0,0,Math.PI*2);ctx.stroke();}}
+ else if(selectedMood==='calm'){for(let i=0;i<3;i++){ctx.globalAlpha=.62-i*.14;ctx.beginPath();ctx.ellipse(0,0,rx*(1.12+i*.17),ry*(1.08+i*.12),Math.sin(time*.35+i)*.035,0,Math.PI*2);ctx.stroke();}}
+ else if(selectedMood==='energy'){ctx.globalAlpha=.78;for(let i=0;i<18;i++){const a=Math.PI*2*i/18+time*.22,inner=1.13,outer=i%2===0?1.38:1.27;ctx.beginPath();ctx.moveTo(Math.cos(a)*rx*inner,Math.sin(a)*ry*inner);ctx.lineTo(Math.cos(a)*rx*outer,Math.sin(a)*ry*outer);ctx.stroke();}}
+ else{ctx.globalAlpha=.55;for(let i=0;i<3;i++){const angle=time*.12+i*2.1;ctx.beginPath();ctx.ellipse(0,0,rx*(1.16+i*.16),ry*(1.1+i*.13),angle,0,Math.PI*2);ctx.stroke();}}
+ for(let i=0;i<14;i++){
+  const a=Math.PI*2*i/14+time*(selectedMood==='energy'?.65:.18),pulse=1+.035*Math.sin(time*2+i),x=Math.cos(a)*rx*1.3*pulse,y=Math.sin(a)*ry*1.25*pulse,r=(i%4===0?3.1:1.8)*(w/900);
+  ctx.globalAlpha=.45+.4*(.5+.5*Math.sin(time*2+i));
+  if(selectedMood==='love'){ctx.font=Math.max(10,14*w/900)+'px sans-serif';ctx.fillText('♥',x-5,y+5);}
+  else if(selectedMood==='mystic'){ctx.beginPath();ctx.arc(x,y,r*1.3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.moveTo(x-r*3,y);ctx.lineTo(x+r*3,y);ctx.moveTo(x,y-r*3);ctx.lineTo(x,y+r*3);ctx.stroke();}
+  else{ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();}
+ }
+ ctx.restore();
+}
+function renderFrame(){
+ if(!running)return;animationFrame=requestAnimationFrame(renderFrame);
+ if(video.readyState<2||video.currentTime===lastVideoTime||!faceLandmarker)return;
+ resizeCanvas();lastVideoTime=video.currentTime;
+ const result=faceLandmarker.detectForVideo(video,performance.now());ctx.clearRect(0,0,canvas.width,canvas.height);
+ if(result.faceLandmarks?.length){drawFaceEffect(result.faceLandmarks[0],performance.now());setStatus('MOOD ACTIVE · '+filterData[selectedMood].name);}
+ else setStatus('Alinea tu rostro frente a la cámara');
+}
+function stopCamera(closeModel=true){
+ running=false;if(animationFrame)cancelAnimationFrame(animationFrame);animationFrame=0;ctx.clearRect(0,0,canvas.width,canvas.height);
+ if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;video.pause();video.srcObject=null;
+ if(closeModel&&faceLandmarker){try{faceLandmarker.close();}catch(error){}faceLandmarker=null;}
+}
+function openStudio(){
+ studio.classList.add('open');studio.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+ startLayer.hidden=false;startMessage.classList.remove('studio-error');
+ startMessage.textContent='Activa tu cámara frontal para probar los cuatro universos MOOD. El seguimiento facial ocurre en tiempo real desde tu navegador.';
+ setStatus('MOOD® / FACE FILTER STUDIO');startCamera();
+}
+function closeStudio(){stopCamera(true);studio.classList.remove('open');studio.setAttribute('aria-hidden','true');document.body.style.overflow='';setStatus('Experiencia cerrada');}
+document.querySelectorAll('[data-open-filter]').forEach(button=>button.addEventListener('click',openStudio));
+document.getElementById('studioClose').addEventListener('click',closeStudio);
+enableButton.addEventListener('click',startCamera);
+filterButtons.forEach(button=>button.addEventListener('click',()=>setFilterMood(button.dataset.filterMood)));
+soundButton.addEventListener('click',()=>{soundOn=!soundOn;soundButton.textContent=soundOn?'SOUND ON':'SOUND OFF';soundButton.setAttribute('aria-pressed',String(soundOn));if(soundOn)playMoodTone(selectedMood);});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&studio.classList.contains('open'))closeStudio();});
+setFilterMood('mystic',false);
+</script>
+
 </body></html>
