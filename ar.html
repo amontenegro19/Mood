@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#111111"><title>MOOD — Realidad aumentada</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#09090b;color:#fff;font-family:Arial,sans-serif}
+#camera{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;transition:opacity .5s}
+#stage{position:fixed;inset:0;width:100%;height:100%;display:block}
+.shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,#08080b99,transparent 24%,transparent 70%,#08080bdd)}
+header{position:fixed;top:0;left:0;right:0;padding:24px 22px;display:flex;justify-content:space-between;align-items:center;z-index:4}
+.logo{font-size:22px;letter-spacing:5px;font-weight:700}.tag{font:9px monospace;letter-spacing:2px;color:#ddd}
+.panel{position:fixed;z-index:5;left:22px;right:22px;bottom:max(26px,env(safe-area-inset-bottom));text-align:center}
+.kicker{font:10px monospace;letter-spacing:3px;color:#ddd}.panel h1{font-size:clamp(26px,7vw,42px);font-weight:400;letter-spacing:1px;margin:12px 0}.panel p{font-size:13px;line-height:1.5;color:#d0cdd3;max-width:420px;margin:0 auto 20px}
+button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210px;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
+#status{font-size:11px;color:#ccc;margin-top:13px;min-height:15px}
+.mooddots{display:flex;justify-content:center;gap:10px;margin:0 0 18px}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 18px currentColor}
+#start{display:block}.hidden{display:none!important}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head>
+<body>
+<video id="camera" autoplay muted playsinline></video><canvas id="stage"></canvas><div class="shade"></div>
+<header><div class="logo">MOOD</div><div class="tag">YOUR MOOD. YOUR SCENT.</div></header>
+<div class="panel" id="intro"><div class="kicker">MOOD / WEB AR EXPERIENCE</div><h1>El perfume cobra vida.</h1><div class="mooddots"><i class="dot" style="color:#e94f87;background:#e94f87"></i><i class="dot" style="color:#829be8;background:#829be8"></i><i class="dot" style="color:#ff7048;background:#ff7048"></i><i class="dot" style="color:#8057c7;background:#8057c7"></i></div><p>Activa tu cámara y descubre el frasco MOOD rodeado de humo en los cuatro colores de sus fragancias.</p><button id="start">ACTIVAR CÁMARA ↗</button><div id="status">La experiencia necesita permiso para usar la cámara.</div></div>
+<div class="panel hidden" id="active"><div class="kicker">FOUR MOODS · ONE FRAGRANCE</div><h1>YOUR MOOD. YOUR SCENT.</h1><p>Mueve lentamente tu teléfono y observa las cuatro atmósferas alrededor del frasco.</p><button id="close">CERRAR EXPERIENCIA</button></div>
+<script type="module">
+import * as THREE from 'three';
+const video=document.getElementById('camera'),canvas=document.getElementById('stage'),status=document.getElementById('status');
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);camera.position.set(0,0,8);
+scene.add(new THREE.AmbientLight(0xffffff,2.0));const key=new THREE.PointLight(0xffffff,35);key.position.set(3,4,5);scene.add(key);
+const bottle=new THREE.Group();scene.add(bottle);
+const glass=new THREE.MeshPhysicalMaterial({color:0xe8e1eb,metalness:.08,roughness:.12,transmission:.48,thickness:.7,transparent:true,opacity:.72,clearcoat:1});
+const body=new THREE.Mesh(new THREE.CylinderGeometry(.78,.82,2.35,64,1,false),glass);body.position.y=-.05;bottle.add(body);
+const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.12,64),new THREE.MeshPhysicalMaterial({color:0xddd4df,roughness:.18,metalness:.2,transparent:true,opacity:.7}));base.position.y=-1.27;bottle.add(base);
+const neck=new THREE.Mesh(new THREE.CylinderGeometry(.29,.32,.48,48),glass);neck.position.y=1.36;bottle.add(neck);
+const collar=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.12,48),new THREE.MeshStandardMaterial({color:0xb8a9a0,metalness:.8,roughness:.25}));collar.position.y=1.64;bottle.add(collar);
+const cap=new THREE.Mesh(new THREE.CylinderGeometry(.32,.34,.56,48),new THREE.MeshStandardMaterial({color:0x17151a,metalness:.55,roughness:.22}));cap.position.y=1.98;bottle.add(cap);
+const labelCanvas=document.createElement('canvas');labelCanvas.width=512;labelCanvas.height=256;const lctx=labelCanvas.getContext('2d');lctx.fillStyle='rgba(15,13,17,.88)';lctx.fillRect(0,0,512,256);lctx.fillStyle='#fff';lctx.font='bold 76px Arial';lctx.textAlign='center';lctx.fillText('MOOD',256,125);lctx.font='22px Arial';lctx.letterSpacing='8px';lctx.fillText('EAU DE PARFUM · 50 ML',256,177);
+const labelTex=new THREE.CanvasTexture(labelCanvas);const label=new THREE.Mesh(new THREE.PlaneGeometry(1.48,.72),new THREE.MeshBasicMaterial({map:labelTex,transparent:true}));label.position.set(0,.03,.805);bottle.add(label);
+const colors=[0xe94f87,0x829be8,0xff7048,0x8057c7],smoke=[];
+function makeTexture(){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,2,64,64,62);g.addColorStop(0,'rgba(255,255,255,.72)');g.addColorStop(.22,'rgba(255,255,255,.38)');g.addColorStop(.6,'rgba(255,255,255,.10)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)}
+const smokeTex=makeTexture();
+colors.forEach((color,index)=>{const count=85,positions=new Float32Array(count*3),sizes=new Float32Array(count),vel=[];for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*2.5;positions[i*3+1]=Math.random()*3.5-1.8;positions[i*3+2]=(Math.random()-.5)*.9;sizes[i]=.28+Math.random()*.58;vel.push({x:(Math.random()-.5)*.004,y:.006+Math.random()*.012,z:(Math.random()-.5)*.003,phase:Math.random()*6.28});}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('size',new THREE.BufferAttribute(sizes,1));const mat=new THREE.PointsMaterial({color,size:.48,map:smokeTex,transparent:true,opacity:.25,depthWrite:false,blending:THREE.AdditiveBlending});const points=new THREE.Points(geo,mat);points.position.set((index-1.5)*.33,-.1,0);scene.add(points);smoke.push({points,vel,positions,index});});
+const clock=new THREE.Clock();let stream=null,raf=0;
+function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=Math.sin(t*.65)*.08;smoke.forEach(({points,vel,positions,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
+function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
+addEventListener('resize',resize);
+document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;status.textContent='Solicitando acceso a la cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');animate();}catch(e){status.textContent=e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.';btn.disabled=false;}});
+document.getElementById('close').addEventListener('click',()=>{cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());video.style.opacity='0';document.getElementById('active').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');document.getElementById('start').disabled=false;});
+</script></body></html>
