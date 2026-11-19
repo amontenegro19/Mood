@@ -11,7 +11,14 @@
 header{position:fixed;top:0;left:0;right:0;padding:24px 22px;display:flex;justify-content:space-between;align-items:center;z-index:4}
 .logo{font-size:22px;letter-spacing:5px;font-weight:700}.tag{font:9px monospace;letter-spacing:2px;color:#ddd}
 .panel{position:fixed;z-index:5;left:22px;right:22px;bottom:max(26px,env(safe-area-inset-bottom));text-align:center}
-.kicker{font:10px monospace;letter-spacing:3px;color:#ddd}.panel h1{font-size:clamp(26px,7vw,42px);font-weight:400;letter-spacing:1px;margin:12px 0}.panel p{font-size:13px;line-height:1.5;color:#d0cdd3;max-width:420px;margin:0 auto 20px}
+.kicker{font:10px monospace;letter-spacing:3px;color:#ddd}.panel h1{font-size:clamp(26px,7vw,42px);font-weight:400;letter-spacing:1px;margin:12px 0}.panel p{font-size:13px;line-height:1.5;color:#d0cdd3;max-width:420px;margin:0 auto 14px}
+.ar-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-width:520px;margin:14px auto 12px}
+.ar-actions a,.ar-actions button{min-width:0;width:100%;padding:13px 5px;border:1px solid #ffffff80;background:#17151beF;color:#fff;font-size:9px;letter-spacing:1px;line-height:1.35;text-decoration:none;display:flex;align-items:center;justify-content:center;text-align:center}
+.ar-actions a:first-child{background:#f6f1f4;color:#151217;border-color:#f6f1f4}
+#infoModal{position:fixed;inset:0;z-index:10;background:#08080bea;display:none;align-items:center;justify-content:center;padding:24px}
+#infoModal.open{display:flex}.modal-card{width:min(100%,440px);max-height:75vh;overflow:auto;background:#171519;border:1px solid #ffffff30;padding:25px;text-align:left}
+.modal-card h2{font-size:25px;font-weight:400;margin:12px 0}.modal-card p,.modal-card li{font-size:13px;line-height:1.65;color:#d4d0d6}.modal-card button{margin-top:12px;min-width:0;width:100%}
+@media(max-width:390px){.panel{left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom))}.ar-actions{gap:5px}.ar-actions a,.ar-actions button{font-size:8px;padding:11px 3px;letter-spacing:.5px}.panel h1{font-size:25px}.panel p{font-size:12px;margin-bottom:8px}}
 button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210px;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
 #status{font-size:11px;color:#ccc;margin-top:13px;min-height:15px}
 .mooddots{display:flex;justify-content:center;gap:10px;margin:0 0 18px}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 18px currentColor}
@@ -24,11 +31,28 @@ button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210
 <video id="camera" autoplay muted playsinline></video><canvas id="stage"></canvas><div class="shade"></div>
 <header><div class="logo">MOOD</div><div class="tag">YOUR MOOD. YOUR SCENT.</div></header>
 <div class="panel" id="intro"><div class="kicker">MOOD / WEB AR EXPERIENCE</div><h1>El perfume cobra vida.</h1><div class="mooddots"><i class="dot" style="color:#e94f87;background:#e94f87"></i><i class="dot" style="color:#829be8;background:#829be8"></i><i class="dot" style="color:#ff7048;background:#ff7048"></i><i class="dot" style="color:#8057c7;background:#8057c7"></i></div><p>Activa tu cámara y descubre el frasco MOOD rodeado de humo en los cuatro colores de sus fragancias.</p><button id="start">ACTIVAR CÁMARA ↗</button><div id="status">La experiencia necesita permiso para usar la cámara.</div></div>
-<div class="panel hidden" id="active"><div class="kicker">FOUR MOODS · ONE FRAGRANCE</div><h1>YOUR MOOD. YOUR SCENT.</h1><p>Mueve lentamente tu teléfono y observa las cuatro atmósferas alrededor del frasco.</p><div id="trackingStatus" style="font:11px monospace;letter-spacing:.5px;color:#eee;margin:12px auto 16px;max-width:340px">Apunta al QR del empaque para activar el frasco.</div><button id="close">CERRAR EXPERIENCIA</button></div>
+<div class="panel hidden" id="active"><div class="kicker">FOUR MOODS · ONE FRAGRANCE</div><h1>YOUR MOOD. YOUR SCENT.</h1><p>Mueve lentamente tu teléfono y observa las cuatro atmósferas alrededor del frasco.</p><div id="trackingStatus" style="font:11px monospace;letter-spacing:.5px;color:#eee;margin:8px auto 10px;max-width:340px">Apunta al diseño frontal del empaque.</div>
+<div class="ar-actions">
+ <a href="index.html#filtro">PROBAR FILTRO ↗</a>
+ <button type="button" data-info="essences">ESENCIAS +</button>
+ <button type="button" data-info="packaging">EMPAQUE +</button>
+</div>
+<button id="close">CERRAR EXPERIENCIA</button></div>
+<div id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+ <div class="modal-card"><div class="kicker" id="infoKicker">MOOD / DETAILS</div><h2 id="infoTitle">Descubre MOOD</h2><div id="infoBody"></div><button type="button" id="infoClose">VOLVER A LA EXPERIENCIA</button></div>
+</div>
 <script type="module">
 import * as THREE from 'three';
 import jsQR from 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm';
 const video=document.getElementById('camera'),canvas=document.getElementById('stage'),status=document.getElementById('status');
+const infoModal=document.getElementById('infoModal'),infoTitle=document.getElementById('infoTitle'),infoBody=document.getElementById('infoBody');
+const infoContent={
+ essences:{kicker:'MOOD / FOUR FRAGRANCES',title:'Encuentra tu esencia',body:'<ul><li><b>LOVE</b> — Rosa, frutos rojos y vainilla. Cálida, íntima y envolvente.</li><li><b>CALM</b> — Té blanco, lavanda y sándalo. Suave, serena y limpia.</li><li><b>ENERGY</b> — Mandarina, jengibre y cítricos. Luminosa, vibrante y dinámica.</li><li><b>MYSTIC</b> — Ámbar, jazmín y vainilla oscura. Profunda, envolvente y misteriosa.</li></ul>'},
+ packaging:{kicker:'MOOD / PACKAGING',title:'Diseño que expresa tu mood',body:'<p>El empaque frontal comparte una misma composición para los cuatro perfumes: fondo oscuro, identidad MOOD, órbitas gráficas y un acento de color que identifica cada fragancia.</p><p><b>Formato:</b> Eau de Parfum · 50 ml.</p><p>Una presentación minimalista y sensorial que conecta el objeto físico con la experiencia digital.</p>'}
+};
+document.querySelectorAll('[data-info]').forEach(button=>button.addEventListener('click',()=>{const info=infoContent[button.dataset.info];if(!info)return;document.getElementById('infoKicker').textContent=info.kicker;infoTitle.textContent=info.title;infoBody.innerHTML=info.body;infoModal.classList.add('open');}));
+document.getElementById('infoClose').addEventListener('click',()=>infoModal.classList.remove('open'));
+infoModal.addEventListener('click',event=>{if(event.target===infoModal)infoModal.classList.remove('open')});
 function setTrackingStatus(message){status.textContent=message;const activeStatus=document.getElementById('trackingStatus');if(activeStatus)activeStatus.textContent=message;}
 const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.01,100);camera.position.set(0,0,0);camera.matrixAutoUpdate=false;camera.matrixWorld.identity();camera.matrixWorldInverse.identity();
@@ -57,7 +81,7 @@ function trackQR(){
  if(scanCanvas.width!==w||scanCanvas.height!==h){scanCanvas.width=w;scanCanvas.height=h;updateCameraCalibration(w,h);}
  scanCtx.drawImage(video,0,0,w,h);
  const image=scanCtx.getImageData(0,0,w,h),code=jsQR(image.data,w,h,{inversionAttempts:'attemptBoth'});
- if(!code){markerRoot.visible=false;markerFound=false;setTrackingStatus('Busca el diseño frontal del empaque y mantenlo dentro del encuadre.');return;}
+ if(!code){markerRoot.visible=false;markerFound=false;setTrackingStatus('Busca el marcador del empaque y mantenlo dentro del encuadre.');return;}
  const cv=window.cv,loc=code.location;
  try{
   const s=QR_SIDE/2;
@@ -70,11 +94,11 @@ function trackQR(){
    const rotation=new cv.Mat();cv.Rodrigues(rvec,rotation);const r=(row,col)=>rotation.doubleAt(row,col),tx=tvec.doubleAt(0,0),ty=tvec.doubleAt(1,0),tz=tvec.doubleAt(2,0);
    const pose=new THREE.Matrix4().set(r(0,0),r(0,1),r(0,2),tx,-r(1,0),-r(1,1),-r(1,2),-ty,-r(2,0),-r(2,1),-r(2,2),-tz,0,0,0,1);
    markerRoot.matrix.copy(pose);markerRoot.matrixWorldNeedsUpdate=true;markerRoot.visible=true;markerFound=true;
-   setTrackingStatus('CÓDIGO MOOD DETECTADO · FRASCO ACTIVO');
+   setTrackingStatus('MARCADOR DETECTADO · FRASCO ACTIVO');
    rotation.delete();
   }else{markerRoot.visible=false;markerFound=false;setTrackingStatus('Alinea el diseño frontal con la cámara.');}
   objectPoints.delete();imagePoints.delete();cameraMatrix.delete();dist.delete();rvec.delete();tvec.delete();
- }catch(error){markerRoot.visible=false;markerFound=false;setTrackingStatus('No se pudo calcular la posición del QR. Inténtalo de nuevo.');}
+ }catch(error){markerRoot.visible=false;markerFound=false;setTrackingStatus('No se pudo calcular la posición del marcador. Inténtalo de nuevo.');}
 }
 function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();if(++scanFrame%3===0)trackQR();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=1.25+Math.sin(t*.65)*.025;smoke.forEach(({points,vel,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
 function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
