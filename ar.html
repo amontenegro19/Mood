@@ -41,6 +41,28 @@ button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210
 <div id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
  <div class="modal-card"><div class="kicker" id="infoKicker">MOOD / DETAILS</div><h2 id="infoTitle">Descubre MOOD</h2><div id="infoBody"></div><button type="button" id="infoClose">VOLVER A LA EXPERIENCIA</button></div>
 </div>
+<script>
+(()=> {
+ const video=document.getElementById('camera'),intro=document.getElementById('intro'),active=document.getElementById('active'),start=document.getElementById('start'),status=document.getElementById('status'),tracking=document.getElementById('trackingStatus');
+ const say=t=>{status.textContent=t;if(tracking)tracking.textContent=t;};
+ let stream=null;
+ start.addEventListener('click',async()=>{
+  start.disabled=true;say('Solicitando permiso para usar la cámara…');
+  try{
+   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Este navegador no permite acceder a la cámara. Abre el enlace en Safari o Chrome mediante HTTPS.');
+   stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}});
+   video.srcObject=stream;await video.play();video.style.opacity='1';
+   intro.classList.add('hidden');active.classList.remove('hidden');
+   say('Cámara activa. Mantén visible el frente del empaque MOOD.');
+   window.dispatchEvent(new CustomEvent('mood-camera-ready'));
+  }catch(e){say(e.name==='NotAllowedError'?'No diste permiso a la cámara. Actívalo en Ajustes del navegador.':(e.message||'No se pudo activar la cámara. Abre la página en Safari o Chrome y comprueba los permisos.'));start.disabled=false;}
+ });
+ document.getElementById('close').addEventListener('click',()=>{
+  if(stream)stream.getTracks().forEach(track=>track.stop());stream=null;video.srcObject=null;video.style.opacity='0';
+  active.classList.add('hidden');intro.classList.remove('hidden');start.disabled=false;say('La experiencia necesita permiso para usar la cámara.');
+ });
+})();
+</script>
 <script type="module">
 import * as THREE from 'three';
 import jsQR from 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm';
@@ -100,9 +122,10 @@ function trackQR(){
   objectPoints.delete();imagePoints.delete();cameraMatrix.delete();dist.delete();rvec.delete();tvec.delete();
  }catch(error){markerRoot.visible=false;markerFound=false;setTrackingStatus('No se pudo calcular la posición del marcador. Inténtalo de nuevo.');}
 }
-function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();if(++scanFrame%3===0)trackQR();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=1.25+Math.sin(t*.65)*.025;smoke.forEach(({points,vel,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
+function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=1.25+Math.sin(t*.65)*.025;smoke.forEach(({points,vel,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
 function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 addEventListener('resize',resize);
-document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;setTrackingStatus('Solicitando acceso a la cámara…');try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');setTrackingStatus('Cámara activa. Preparando reconocimiento del marcador…');await waitForCV();setTrackingStatus('Apunta al marcador frontal del empaque.');animate();}catch(e){setTrackingStatus(e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.');btn.disabled=false;}});
-document.getElementById('close').addEventListener('click',()=>{cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());video.style.opacity='0';markerRoot.visible=false;markerFound=false;document.getElementById('active').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');document.getElementById('start').disabled=false;});
+window.addEventListener('mood-camera-ready',()=>{animate();});
+
+
 </script></body></html>
