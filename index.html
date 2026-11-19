@@ -56,28 +56,37 @@
 
 <section class="section darksection reveal" id="realidad-aumentada">
  <div class="sectionhead">
-  <div><div class="mono">05 — MOOD augmented reality</div><h2>Reality,<br>with a mood.</h2></div>
-  <p>La realidad aumentada de MOOD convierte tu rostro en un lienzo emocional. Activa la cámara frontal, elige una fragancia y descubre una atmósfera visual que responde a tus movimientos.</p>
+  <div><div class="mono">05 — MOOD / WEB AR</div><h2>Scan.<br>See your mood.</h2></div>
+  <p>Una experiencia independiente del filtro facial. Escanea el código QR del empaque y descubre el frasco MOOD en realidad aumentada, envuelto en humo de los cuatro universos de color.</p>
  </div>
- <div class="split">
-  <div class="facearea" style="min-height:390px">
-   <div class="faceorbit"></div><div class="face"><div class="hair"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="mouth"></div></div>
-   <span class="spark s1">✦</span><span class="spark s2">·</span><span class="spark s3">✧</span><span class="spark s4">✦</span>
+ <div class="split" style="align-items:center">
+  <div class="ar-preview" style="min-height:370px;background:radial-gradient(circle at 50% 48%,#40304c 0%,#17151b 42%,#101010 78%);display:grid;place-items:center;position:relative;overflow:hidden">
+   <div style="position:absolute;width:260px;height:260px;border:1px solid #ffffff20;border-radius:50%;box-shadow:0 0 75px #e94f8730,0 0 90px #829be830 inset"></div>
+   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 65%,#e94f8740,transparent 34%),radial-gradient(ellipse at 70% 55%,#829be840,transparent 32%),radial-gradient(ellipse at 42% 28%,#ff704830,transparent 32%),radial-gradient(ellipse at 62% 32%,#8057c740,transparent 30%);filter:blur(18px)"></div>
+   <div style="position:relative;width:105px;height:190px;border:1px solid #ffffffa0;border-radius:22px 22px 15px 15px;background:linear-gradient(90deg,#ffffff28,#ffffff08 35%,#ffffff35 75%,#ffffff10);box-shadow:0 15px 45px #0009,inset 8px 0 12px #ffffff18;z-index:1">
+    <div style="position:absolute;top:-28px;left:34px;width:37px;height:30px;background:linear-gradient(90deg,#777,#eee,#666);border-radius:5px 5px 2px 2px"></div>
+    <div style="position:absolute;top:55px;left:0;right:0;height:62px;background:#111d;display:grid;place-items:center;color:#fff;font-size:17px;letter-spacing:3px">MOOD</div>
+    <div style="position:absolute;bottom:17px;left:0;right:0;text-align:center;color:#ffffffbb;font-size:7px;letter-spacing:2px">EAU DE PARFUM</div>
+   </div>
+   <span style="position:absolute;top:16%;left:16%;color:#e94f87;font-size:28px">✦</span><span style="position:absolute;top:23%;right:17%;color:#829be8;font-size:24px">✧</span><span style="position:absolute;bottom:20%;left:20%;color:#ff7048;font-size:24px">·</span><span style="position:absolute;bottom:16%;right:20%;color:#8057c7;font-size:30px">✦</span>
+   <div style="position:absolute;bottom:18px;left:0;right:0;text-align:center;font:10px monospace;letter-spacing:3px;color:#ffffff9c">FOUR MOODS · ONE EXPERIENCE</div>
   </div>
   <div class="text">
-   <div class="mono">An immersive face filter</div>
-   <h3>Tu mood. Tu rostro. Tu universo.</h3>
-   <p>El filtro utiliza seguimiento facial en tiempo real para ubicar halos, órbitas y partículas alrededor del rostro. Cada fragancia tiene su propio color, ritmo visual y paisaje sonoro.</p>
-   <ul class="list">
-    <li><b>01</b> LOVE — halos rosados y destellos delicados.</li>
-    <li><b>02</b> CALM — ondas azules y movimiento pausado.</li>
-    <li><b>03</b> ENERGY — líneas coral y partículas dinámicas.</li>
-    <li><b>04</b> MYSTIC — órbitas violetas y pequeñas constelaciones.</li>
-   </ul>
-   <button class="btn" type="button" data-open-filter>ACTIVAR REALIDAD AUMENTADA ↗</button>
+   <div class="mono">Scan the QR / activate your camera</div>
+   <h3>El perfume cobra vida.</h3>
+   <p>Apunta la cámara al código QR. En tu navegador se abrirá una experiencia WebAR: el frasco aparece en pantalla y libera humo animado en rosa, azul, naranja y violeta.</p>
+   <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;margin:26px 0">
+    <div id="moodArQr" style="width:142px;height:142px;padding:8px;background:#fff;display:grid;place-items:center;border-radius:4px"><span style="color:#111;font-size:11px;text-align:center">Cargando QR…</span></div>
+    <div style="max-width:230px"><div class="mono">MOOD / INTERACTIVE PACKAGING</div><p style="font-size:13px">Escanea para abrir la cámara y visualizar el frasco con sus cuatro estelas de humo.</p><a class="btn" href="ar.html" style="display:inline-flex;margin-top:10px">PROBAR EXPERIENCIA ↗</a></div>
+   </div>
+   <p style="font-size:11px;color:#aaa">El filtro facial sigue siendo una experiencia separada. La realidad aumentada del producto no necesita reconocer tu rostro.</p>
   </div>
  </div>
 </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(()=>{const node=document.getElementById('moodArQr');if(node&&window.QRCode){node.innerHTML='';new QRCode(node,{text:'https://mood-gold.vercel.app/ar.html',width:126,height:126,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}})();
+</script>
 
 <section class="section reveal" id="filtro"><div class="sectionhead"><div><div class="mono">06 — Face filter / UI</div><h2>Wear your<br>mood.</h2></div><p>Un filtro facial en tiempo real traduce cada mood a un lenguaje gráfico: halos, ondas, destellos y órbitas que siguen tu rostro.</p></div><div class="filtergrid"><div class="facearea"><div class="faceorbit"></div><div class="face"><div class="hair"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="mouth"></div></div><span class="spark s1">✦</span><span class="spark s2">·</span><span class="spark s3">✧</span><span class="spark s4">✦</span></div><div class="uipanel"><div class="mono" style="color:#888">MOOD® / FILTER STUDIO</div><div class="mono" style="margin-top:35px">Your selected mood</div><h3 id="uiMood">MYSTIC</h3><p id="uiDesc">Explora tu lado introspectivo. Una órbita violeta y pequeñas constelaciones enmarcan el rostro.</p><div style="height:2px;background:#444;margin:24px 0"><div style="width:72%;height:2px;background:var(--mood)"></div></div><div class="mono" style="color:#777">Visual intensity / 72%</div><div class="ui-buttons"><button data-mood="love">Love</button><button data-mood="calm">Calm</button><button data-mood="energy">Energy</button><button data-mood="mystic">Mystic</button></div><button class="btn" type="button" data-open-filter style="margin-top:22px">EXPERIENCE MOOD ↗</button><p style="font-size:10px;margin-top:16px">La cámara se activa cuando abres la experiencia. Elige tu mood y cambia de filtro cuando quieras.</p></div></div></section>
 <section class="section reveal" id="producto"><div class="sectionhead"><div><div class="mono">07 — Product information</div><h2>A scent with<br>a point of view.</h2></div><p>Ficha de producto para la caja, el catálogo y la interfaz digital.</p></div><div class="split"><div class="text"><div class="mono">Selected fragrance / 04</div><h3 id="productName">MYSTIC — Eau de Parfum</h3><p id="productDesc">Una fragancia conceptual para momentos de introspección, imaginación y curiosidad.</p><ul class="list"><li><b>FORMATO</b> 50 ml / 1.69 fl. oz.</li><li><b>NOTAS</b> <span id="productNotes">Ámbar · Jazmín · Vainilla oscura</span></li><li><b>CARÁCTER</b> <span id="productChar">Profundo · envolvente · misterioso</span></li><li><b>EXPERIENCIA</b> Filtro facial interactivo en tiempo real</li></ul></div><div style="padding:35px;border:1px solid var(--line);min-height:300px;display:flex;flex-direction:column;justify-content:space-between"><div class="mono">How to use</div><div style="font-size:clamp(27px,4vw,43px);line-height:1.25;letter-spacing:-.06em">Spray it.<br>Feel it.<br><span style="color:var(--mood)">Explore it.</span></div><p class="copy" style="margin:15px 0 0">Rocía sobre los puntos de pulso. Después, abre EXPERIENCE MOOD, activa la cámara y selecciona el mood que quieras llevar contigo.</p></div></div></section>
@@ -163,13 +172,13 @@ function initAudio(){
   const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
   if(!audioContext){
    audioContext=new AudioCtx();
-   audioMaster=audioContext.createGain();audioMaster.gain.value=soundOn?.055:.0001;audioMaster.connect(audioContext.destination);
+   audioMaster=audioContext.createGain();audioMaster.gain.value=soundOn ? .18 : .0001;audioMaster.connect(audioContext.destination);
    const filter=audioContext.createBiquadFilter();filter.type='lowpass';filter.frequency.value=520;filter.Q.value=.7;
-   const padGain=audioContext.createGain();padGain.gain.value=.22;filter.connect(padGain).connect(audioMaster);
+   const padGain=audioContext.createGain();padGain.gain.value=.42;filter.connect(padGain).connect(audioMaster);
    [110,164.81,220.0].forEach((frequency,index)=>{const osc=audioContext.createOscillator();osc.type=index===1?'triangle':'sine';osc.frequency.value=frequency;osc.detune.value=index===2?5:0;osc.connect(filter);osc.start();ambientOscillators.push(osc);});
   }
-  if(audioContext.state==='suspended')audioContext.resume();
-  if(audioMaster)audioMaster.gain.setTargetAtTime(soundOn?.055:.0001,audioContext.currentTime,.18);
+  if(audioContext.state==='suspended'){const resume=audioContext.resume();if(resume&&resume.catch)resume.catch(()=>{});}
+  if(audioMaster)audioMaster.gain.setTargetAtTime(soundOn ? .18 : .0001,audioContext.currentTime,.08);
  }catch(error){}
 }
 function playMoodTone(key){
@@ -179,7 +188,7 @@ function playMoodTone(key){
   (notes[key]||notes.mystic).forEach((frequency,i)=>{
    const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
    oscillator.type='sine';oscillator.frequency.value=frequency;
-   gain.gain.setValueAtTime(.0001,now+i*.075);gain.gain.exponentialRampToValueAtTime(.035,now+i*.075+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.28);
+   gain.gain.setValueAtTime(.0001,now+i*.075);gain.gain.exponentialRampToValueAtTime(.12,now+i*.075+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.28);
    oscillator.connect(gain).connect(audioMaster);oscillator.start(now+i*.075);oscillator.stop(now+i*.075+.3);
   });
  }catch(error){}
@@ -253,11 +262,11 @@ function openStudio(){
  setStatus('MOOD® / FACE FILTER STUDIO');startCamera();
 }
 function closeStudio(){stopCamera(true);studio.classList.remove('open');studio.setAttribute('aria-hidden','true');document.body.style.overflow='';setStatus('Experiencia cerrada');}
-document.querySelectorAll('[data-open-filter]').forEach(button=>button.addEventListener('click',openStudio));
+document.querySelectorAll('[data-open-filter]').forEach(button=>button.addEventListener('click',()=>{initAudio();openStudio();}));
 document.getElementById('studioClose').addEventListener('click',closeStudio);
-enableButton.addEventListener('click',startCamera);
+enableButton.addEventListener('click',()=>{initAudio();startCamera();});
 filterButtons.forEach(button=>button.addEventListener('click',()=>setFilterMood(button.dataset.filterMood)));
-soundButton.addEventListener('click',()=>{soundOn=!soundOn;soundButton.textContent=soundOn?'SOUND ON':'SOUND OFF';soundButton.setAttribute('aria-pressed',String(soundOn));if(soundOn){initAudio();playMoodTone(selectedMood);}else if(audioMaster&&audioContext){audioMaster.gain.setTargetAtTime(.0001,audioContext.currentTime,.12);}});
+soundButton.addEventListener('click',()=>{soundOn=!soundOn;soundButton.textContent=soundOn?'SOUND ON':'SOUND OFF';soundButton.setAttribute('aria-pressed',String(soundOn));if(soundOn){initAudio();playMoodTone(selectedMood);}else if(audioMaster&&audioContext){audioMaster.gain.setTargetAtTime(.0001,audioContext.currentTime,.08);}});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&studio.classList.contains('open'))closeStudio();});
 setFilterMood('mystic',false);
 </script>
