@@ -57,7 +57,7 @@ function trackQR(){
  if(scanCanvas.width!==w||scanCanvas.height!==h){scanCanvas.width=w;scanCanvas.height=h;updateCameraCalibration(w,h);}
  scanCtx.drawImage(video,0,0,w,h);
  const image=scanCtx.getImageData(0,0,w,h),code=jsQR(image.data,w,h,{inversionAttempts:'attemptBoth'});
- if(!code){markerRoot.visible=false;markerFound=false;setTrackingStatus('Busca el código QR del empaque y mantenlo dentro del encuadre.');return;}
+ if(!code){markerRoot.visible=false;markerFound=false;setTrackingStatus('Busca el diseño frontal del empaque y mantenlo dentro del encuadre.');return;}
  const cv=window.cv,loc=code.location;
  try{
   const s=QR_SIDE/2;
@@ -72,13 +72,13 @@ function trackQR(){
    markerRoot.matrix.copy(pose);markerRoot.matrixWorldNeedsUpdate=true;markerRoot.visible=true;markerFound=true;
    setTrackingStatus('CÓDIGO MOOD DETECTADO · FRASCO ACTIVO');
    rotation.delete();
-  }else{markerRoot.visible=false;markerFound=false;setTrackingStatus('Alinea el código QR con la cámara.');}
+  }else{markerRoot.visible=false;markerFound=false;setTrackingStatus('Alinea el diseño frontal con la cámara.');}
   objectPoints.delete();imagePoints.delete();cameraMatrix.delete();dist.delete();rvec.delete();tvec.delete();
  }catch(error){markerRoot.visible=false;markerFound=false;setTrackingStatus('No se pudo calcular la posición del QR. Inténtalo de nuevo.');}
 }
 function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();if(++scanFrame%3===0)trackQR();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=1.25+Math.sin(t*.65)*.025;smoke.forEach(({points,vel,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
 function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 addEventListener('resize',resize);
-document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;setTrackingStatus('Solicitando acceso a la cámara…');try{setTrackingStatus('Cargando reconocimiento del código QR…');await waitForCV();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');setTrackingStatus('Apunta al QR del empaque para activar el frasco.');animate();}catch(e){setTrackingStatus(e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.');btn.disabled=false;}});
+document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;setTrackingStatus('Solicitando acceso a la cámara…');try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');setTrackingStatus('Cámara activa. Preparando reconocimiento del marcador…');await waitForCV();setTrackingStatus('Apunta al marcador frontal del empaque.');animate();}catch(e){setTrackingStatus(e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.');btn.disabled=false;}});
 document.getElementById('close').addEventListener('click',()=>{cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());video.style.opacity='0';markerRoot.visible=false;markerFound=false;document.getElementById('active').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');document.getElementById('start').disabled=false;});
 </script></body></html>
