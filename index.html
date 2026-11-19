@@ -156,7 +156,7 @@ const filterData={
  energy:{name:'ENERGY',color:'#ff7048',description:'Movimiento, confianza y vitalidad. Rayos coral acompañan cada gesto.'},
  mystic:{name:'MYSTIC',color:'#8057c7',description:'Introspección e imaginación. Órbitas violetas y pequeñas constelaciones te envuelven.'}
 };
-let selectedMood='mystic',faceLandmarker=null,stream=null,animationFrame=0,running=false,lastVideoTime=-1,soundOn=true,audioContext=null,audioMaster=null,ambientOscillators=[],mpModule=null;
+let selectedMood='mystic',faceLandmarker=null,stream=null,animationFrame=0,running=false,lastVideoTime=-1,soundOn=true,audioContext=null,audioMaster=null,mpModule=null;
 function setStatus(message){if(statusEl.textContent!==message)statusEl.textContent=message;}
 function setFilterMood(key,playSound=true){
  selectedMood=filterData[key]?key:'mystic';
@@ -167,31 +167,30 @@ function setFilterMood(key,playSound=true){
  filterButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filterMood===selectedMood)));
  if(playSound&&soundOn)playMoodTone(selectedMood);
 }
-function initAudio(){
+function unlockAudio(){
+ const AudioCtx=window.AudioContext||window.webkitAudioContext;
+ if(!AudioCtx){setStatus('Este navegador no admite audio web.');return Promise.resolve(false);}
  try{
-  const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
-  if(!audioContext){
-   audioContext=new AudioCtx();
-   audioMaster=audioContext.createGain();audioMaster.gain.value=soundOn ? .18 : .0001;audioMaster.connect(audioContext.destination);
-   const filter=audioContext.createBiquadFilter();filter.type='lowpass';filter.frequency.value=520;filter.Q.value=.7;
-   const padGain=audioContext.createGain();padGain.gain.value=.42;filter.connect(padGain).connect(audioMaster);
-   [110,164.81,220.0].forEach((frequency,index)=>{const osc=audioContext.createOscillator();osc.type=index===1?'triangle':'sine';osc.frequency.value=frequency;osc.detune.value=index===2?5:0;osc.connect(filter);osc.start();ambientOscillators.push(osc);});
-  }
-  if(audioContext.state==='suspended'){const resume=audioContext.resume();if(resume&&resume.catch)resume.catch(()=>{});}
-  if(audioMaster)audioMaster.gain.setTargetAtTime(soundOn ? .18 : .0001,audioContext.currentTime,.08);
- }catch(error){}
+  if(!audioContext){audioContext=new AudioCtx();audioMaster=audioContext.createGain();audioMaster.gain.value=.75;audioMaster.connect(audioContext.destination);}
+  if(audioContext.state==='suspended')return audioContext.resume().then(()=>true).catch(()=>false);
+  return Promise.resolve(audioContext.state==='running');
+ }catch(error){return Promise.resolve(false);}
 }
-function playMoodTone(key){
- try{
-  if(!soundOn)return;initAudio();if(!audioContext||!audioMaster)return;
-  const now=audioContext.currentTime,notes={love:[523.25,659.25],calm:[392,493.88],energy:[659.25,783.99],mystic:[440,554.37]};
-  (notes[key]||notes.mystic).forEach((frequency,i)=>{
-   const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
-   oscillator.type='sine';oscillator.frequency.value=frequency;
-   gain.gain.setValueAtTime(.0001,now+i*.075);gain.gain.exponentialRampToValueAtTime(.12,now+i*.075+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.28);
-   oscillator.connect(gain).connect(audioMaster);oscillator.start(now+i*.075);oscillator.stop(now+i*.075+.3);
-  });
- }catch(error){}
+async function playMoodTone(key){
+ if(!soundOn)return;
+ const ready=await unlockAudio();
+ if(!ready||!audioContext||!audioMaster){setStatus('Toca SOUND ON para habilitar el audio del dispositivo.');return;}
+ const notes={love:[523.25,659.25,783.99],calm:[392,440,493.88],energy:[659.25,783.99,987.77],mystic:[440,554.37,659.25]};
+ const now=audioContext.currentTime;
+ (notes[key]||notes.mystic).forEach((frequency,i)=>{
+  const oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
+  oscillator.type='sine';oscillator.frequency.setValueAtTime(frequency,now);
+  gain.gain.setValueAtTime(.0001,now+i*.11);
+  gain.gain.linearRampToValueAtTime(.22,now+i*.11+.025);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+i*.11+.42);
+  oscillator.connect(gain);gain.connect(audioMaster);
+  oscillator.start(now+i*.11);oscillator.stop(now+i*.11+.45);
+ });
 }
 function resizeCanvas(){if(!video.videoWidth||!video.videoHeight)return;if(canvas.width!==video.videoWidth||canvas.height!==video.videoHeight){canvas.width=video.videoWidth;canvas.height=video.videoHeight;}}
 async function loadFaceLandmarker(){
@@ -202,7 +201,7 @@ async function loadFaceLandmarker(){
  try{return await FaceLandmarker.createFromOptions(vision,options);}catch(error){options.baseOptions.delegate='CPU';return await FaceLandmarker.createFromOptions(vision,options);}
 }
 async function startCamera(){
- initAudio();
+ unlockAudio();
  enableButton.disabled=true;enableButton.textContent='LOADING…';startMessage.classList.remove('studio-error');
  startMessage.textContent='Solicitando acceso a la cámara y preparando el seguimiento facial…';setStatus('Conectando la cámara frontal…');
  try{
@@ -262,11 +261,11 @@ function openStudio(){
  setStatus('MOOD® / FACE FILTER STUDIO');startCamera();
 }
 function closeStudio(){stopCamera(true);studio.classList.remove('open');studio.setAttribute('aria-hidden','true');document.body.style.overflow='';setStatus('Experiencia cerrada');}
-document.querySelectorAll('[data-open-filter]').forEach(button=>button.addEventListener('click',()=>{initAudio();openStudio();}));
+document.querySelectorAll('[data-open-filter]').forEach(button=>button.addEventListener('click',()=>{unlockAudio();openStudio();}));
 document.getElementById('studioClose').addEventListener('click',closeStudio);
-enableButton.addEventListener('click',()=>{initAudio();startCamera();});
+enableButton.addEventListener('click',()=>{unlockAudio();startCamera();});
 filterButtons.forEach(button=>button.addEventListener('click',()=>setFilterMood(button.dataset.filterMood)));
-soundButton.addEventListener('click',()=>{soundOn=!soundOn;soundButton.textContent=soundOn?'SOUND ON':'SOUND OFF';soundButton.setAttribute('aria-pressed',String(soundOn));if(soundOn){initAudio();playMoodTone(selectedMood);}else if(audioMaster&&audioContext){audioMaster.gain.setTargetAtTime(.0001,audioContext.currentTime,.08);}});
+soundButton.addEventListener('click',async()=>{soundOn=!soundOn;soundButton.textContent=soundOn?'SOUND ON':'SOUND OFF';soundButton.setAttribute('aria-pressed',String(soundOn));if(soundOn){await unlockAudio();playMoodTone(selectedMood);}else if(audioMaster&&audioContext){audioMaster.gain.setTargetAtTime(.0001,audioContext.currentTime,.04);}});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&studio.classList.contains('open'))closeStudio();});
 setFilterMood('mystic',false);
 </script>
