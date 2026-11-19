@@ -17,6 +17,7 @@ button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210
 .mooddots{display:flex;justify-content:center;gap:10px;margin:0 0 18px}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 18px currentColor}
 #start{display:block}.hidden{display:none!important}
 </style>
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
@@ -26,11 +27,14 @@ button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210
 <div class="panel hidden" id="active"><div class="kicker">FOUR MOODS · ONE FRAGRANCE</div><h1>YOUR MOOD. YOUR SCENT.</h1><p>Mueve lentamente tu teléfono y observa las cuatro atmósferas alrededor del frasco.</p><button id="close">CERRAR EXPERIENCIA</button></div>
 <script type="module">
 import * as THREE from 'three';
+import jsQR from 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm';
 const video=document.getElementById('camera'),canvas=document.getElementById('stage'),status=document.getElementById('status');
 const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);
-const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.1,100);camera.position.set(0,0,8);
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.01,100);camera.position.set(0,0,0);camera.matrixAutoUpdate=false;camera.matrixWorld.identity();camera.matrixWorldInverse.identity();
+const markerRoot=new THREE.Group();markerRoot.matrixAutoUpdate=false;markerRoot.visible=false;scene.add(markerRoot);
+const scanCanvas=document.createElement('canvas'),scanCtx=scanCanvas.getContext('2d',{willReadFrequently:true});let cvReady=null,scanFrame=0,markerFound=false;const QR_SIDE=2.4;
 scene.add(new THREE.AmbientLight(0xffffff,2.0));const key=new THREE.PointLight(0xffffff,35);key.position.set(3,4,5);scene.add(key);
-const bottle=new THREE.Group();scene.add(bottle);
+const bottle=new THREE.Group();bottle.position.set(0,1.25,0.04);bottle.scale.setScalar(.88);markerRoot.add(bottle);
 const glass=new THREE.MeshPhysicalMaterial({color:0xe8e1eb,metalness:.08,roughness:.12,transmission:.48,thickness:.7,transparent:true,opacity:.72,clearcoat:1});
 const body=new THREE.Mesh(new THREE.CylinderGeometry(.78,.82,2.35,64,1,false),glass);body.position.y=-.05;bottle.add(body);
 const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.12,64),new THREE.MeshPhysicalMaterial({color:0xddd4df,roughness:.18,metalness:.2,transparent:true,opacity:.7}));base.position.y=-1.27;bottle.add(base);
@@ -42,11 +46,38 @@ const labelTex=new THREE.CanvasTexture(labelCanvas);const label=new THREE.Mesh(n
 const colors=[0xe94f87,0x829be8,0xff7048,0x8057c7],smoke=[];
 function makeTexture(){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,2,64,64,62);g.addColorStop(0,'rgba(255,255,255,.72)');g.addColorStop(.22,'rgba(255,255,255,.38)');g.addColorStop(.6,'rgba(255,255,255,.10)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)}
 const smokeTex=makeTexture();
-colors.forEach((color,index)=>{const count=85,positions=new Float32Array(count*3),sizes=new Float32Array(count),vel=[];for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*2.5;positions[i*3+1]=Math.random()*3.5-1.8;positions[i*3+2]=(Math.random()-.5)*.9;sizes[i]=.28+Math.random()*.58;vel.push({x:(Math.random()-.5)*.004,y:.006+Math.random()*.012,z:(Math.random()-.5)*.003,phase:Math.random()*6.28});}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('size',new THREE.BufferAttribute(sizes,1));const mat=new THREE.PointsMaterial({color,size:.48,map:smokeTex,transparent:true,opacity:.25,depthWrite:false,blending:THREE.AdditiveBlending});const points=new THREE.Points(geo,mat);points.position.set((index-1.5)*.33,-.1,0);scene.add(points);smoke.push({points,vel,positions,index});});
+colors.forEach((color,index)=>{const count=85,positions=new Float32Array(count*3),sizes=new Float32Array(count),vel=[];for(let i=0;i<count;i++){positions[i*3]=(Math.random()-.5)*2.5;positions[i*3+1]=Math.random()*3.5-1.8;positions[i*3+2]=(Math.random()-.5)*.9;sizes[i]=.28+Math.random()*.58;vel.push({x:(Math.random()-.5)*.004,y:.006+Math.random()*.012,z:(Math.random()-.5)*.003,phase:Math.random()*6.28});}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(positions,3));geo.setAttribute('size',new THREE.BufferAttribute(sizes,1));const mat=new THREE.PointsMaterial({color,size:.48,map:smokeTex,transparent:true,opacity:.25,depthWrite:false,blending:THREE.AdditiveBlending});const points=new THREE.Points(geo,mat);points.position.set((index-1.5)*.33,1.2,0.08);markerRoot.add(points);smoke.push({points,vel,positions,index});});
 const clock=new THREE.Clock();let stream=null,raf=0;
-function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=Math.sin(t*.65)*.08;smoke.forEach(({points,vel,positions,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
+async function waitForCV(){if(cvReady)return cvReady;cvReady=new Promise((resolve,reject)=>{const started=Date.now();const check=()=>{if(window.cv&&window.cv.Mat&&window.cv.solvePnP){resolve(window.cv);return;}if(Date.now()-started>25000){reject(new Error('No se pudo cargar el módulo de seguimiento QR.'));return;}setTimeout(check,150);};check();});return cvReady;}
+function updateCameraCalibration(w,h){const fy=(h*.5)/Math.tan(THREE.MathUtils.degToRad(35)*.5),fx=fy;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(h/(2*fy)));camera.aspect=w/h;camera.updateProjectionMatrix();return {fx,fy,cx:w/2,cy:h/2};}
+function trackQR(){
+ if(video.readyState<2||!video.videoWidth)return;
+ const w=video.videoWidth,h=video.videoHeight;
+ if(scanCanvas.width!==w||scanCanvas.height!==h){scanCanvas.width=w;scanCanvas.height=h;updateCameraCalibration(w,h);}
+ scanCtx.drawImage(video,0,0,w,h);
+ const image=scanCtx.getImageData(0,0,w,h),code=jsQR(image.data,w,h,{inversionAttempts:'attemptBoth'});
+ if(!code){markerRoot.visible=false;markerFound=false;status.textContent='Busca el código QR del empaque y mantenlo dentro del encuadre.';return;}
+ const cv=window.cv,loc=code.location;
+ try{
+  const s=QR_SIDE/2;
+  const objectPoints=cv.matFromArray(4,1,cv.CV_32FC3,[-s,s,0,s,s,0,s,-s,0,-s,-s,0]);
+  const imagePoints=cv.matFromArray(4,1,cv.CV_32FC2,[loc.topLeftCorner.x,loc.topLeftCorner.y,loc.topRightCorner.x,loc.topRightCorner.y,loc.bottomRightCorner.x,loc.bottomRightCorner.y,loc.bottomLeftCorner.x,loc.bottomLeftCorner.y]);
+  const {fx,fy,cx,cy}=updateCameraCalibration(w,h);
+  const cameraMatrix=cv.matFromArray(3,3,cv.CV_64F,[fx,0,cx,0,fy,cy,0,0,1]),dist=cv.Mat.zeros(4,1,cv.CV_64F),rvec=new cv.Mat(),tvec=new cv.Mat();
+  const ok=cv.solvePnP(objectPoints,imagePoints,cameraMatrix,dist,rvec,tvec,false,cv.SOLVEPNP_IPPE_SQUARE);
+  if(ok){
+   const rotation=new cv.Mat();cv.Rodrigues(rvec,rotation);const r=(row,col)=>rotation.doubleAt(row,col),tx=tvec.doubleAt(0,0),ty=tvec.doubleAt(1,0),tz=tvec.doubleAt(2,0);
+   const pose=new THREE.Matrix4().set(r(0,0),r(0,1),r(0,2),tx,-r(1,0),-r(1,1),-r(1,2),-ty,-r(2,0),-r(2,1),-r(2,2),-tz,0,0,0,1);
+   markerRoot.matrix.copy(pose);markerRoot.matrixWorldNeedsUpdate=true;markerRoot.visible=true;markerFound=true;
+   status.textContent='CÓDIGO MOOD DETECTADO · FRASCO ACTIVO';
+   rotation.delete();
+  }else{markerRoot.visible=false;markerFound=false;status.textContent='Alinea el código QR con la cámara.';}
+  objectPoints.delete();imagePoints.delete();cameraMatrix.delete();dist.delete();rvec.delete();tvec.delete();
+ }catch(error){markerRoot.visible=false;markerFound=false;status.textContent='No se pudo calcular la posición del QR. Inténtalo de nuevo.';}
+}
+function animate(){raf=requestAnimationFrame(animate);const t=clock.getElapsedTime();if(++scanFrame%3===0)trackQR();bottle.rotation.y=Math.sin(t*.38)*.16;bottle.position.y=1.25+Math.sin(t*.65)*.025;smoke.forEach(({points,vel,index})=>{const p=points.geometry.attributes.position;for(let i=0;i<vel.length;i++){const v=vel[i];p.array[i*3]+=v.x+Math.sin(t+v.phase)*.002;p.array[i*3+1]+=v.y;p.array[i*3+2]+=v.z;if(p.array[i*3+1]>2.2){p.array[i*3]=(Math.random()-.5)*1.2;p.array[i*3+1]=-1.65;p.array[i*3+2]=(Math.random()-.5)*.5;}}p.needsUpdate=true;points.rotation.y=Math.sin(t*.25+index)*.15;points.material.opacity=.2+Math.sin(t*.7+index)*.07;});renderer.render(scene,camera);}
 function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 addEventListener('resize',resize);
-document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;status.textContent='Solicitando acceso a la cámara…';try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');animate();}catch(e){status.textContent=e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.';btn.disabled=false;}});
-document.getElementById('close').addEventListener('click',()=>{cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());video.style.opacity='0';document.getElementById('active').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');document.getElementById('start').disabled=false;});
+document.getElementById('start').addEventListener('click',async()=>{const btn=document.getElementById('start');btn.disabled=true;status.textContent='Solicitando acceso a la cámara…';try{status.textContent='Cargando reconocimiento del código QR…';await waitForCV();stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});video.srcObject=stream;await video.play();video.style.opacity='1';document.getElementById('intro').classList.add('hidden');document.getElementById('active').classList.remove('hidden');status.textContent='Apunta al QR del empaque para activar el frasco.';animate();}catch(e){status.textContent=e.name==='NotAllowedError'?'Permite el acceso a la cámara en los ajustes del navegador.':'No se pudo iniciar la cámara. Comprueba que la página esté abierta mediante HTTPS.';btn.disabled=false;}});
+document.getElementById('close').addEventListener('click',()=>{cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());video.style.opacity='0';markerRoot.visible=false;markerFound=false;document.getElementById('active').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');document.getElementById('start').disabled=false;});
 </script></body></html>
