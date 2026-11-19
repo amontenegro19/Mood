@@ -29,7 +29,7 @@ button{border:0;background:#f6f1f4;color:#151217;padding:16px 25px;min-width:210
 import * as THREE from 'three';
 import jsQR from 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm';
 const video=document.getElementById('camera'),canvas=document.getElementById('stage'),status=document.getElementById('status');
-function setTrackingStatus(message){setTrackingStatus(message;const activeStatus=document.getElementById('trackingStatus');if(activeStatus)activeStatus.textContent=message;}
+function setTrackingStatus(message){status.textContent=message;const activeStatus=document.getElementById('trackingStatus');if(activeStatus)activeStatus.textContent=message;}
 const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);renderer.setClearColor(0x000000,0);
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,innerWidth/innerHeight,.01,100);camera.position.set(0,0,0);camera.matrixAutoUpdate=false;camera.matrixWorld.identity();camera.matrixWorldInverse.identity();
 const markerRoot=new THREE.Group();markerRoot.matrixAutoUpdate=false;markerRoot.visible=false;scene.add(markerRoot);
